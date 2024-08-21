@@ -1,85 +1,84 @@
-// Фабрика (Factory) — це патерн програмування, який надає загальний клас для створення об'єктів, який враховує
-// передані аргументи та вирішує який клас повинен мати об’єкт при створенні
-// Клас Book описує книгу в магазині
+// The Factory is a programming pattern that provides a general class for creating objects. 
+// It considers the passed arguments and determines which class the object should belong to upon creation.
+// The Book class describes a book in the store.
 class Book {
-  /**
-   * Конструктор Book приймає об'єкт з параметрами
-   * title - назва книги
-   * author - автор книги
-   * coverColor - колір обкладинки книги
-   */
-  /**
-   * Метод describe генерує опис книги
-   *  Повертає рядок у форматі: "Книга: '{назва}', автор: '{автор}', колір обкладинки: '{колір}'"
-   */
+  constructor({ title, author, coverColor }) {
+    this.title = title;
+    this.author = author;
+    this.coverColor = coverColor;
+  }
+
+  describe() {
+    return `Book: '${this.title}', author: '${this.author}', cover color: '${this.coverColor}'`;
+  }
 }
 
 /**
- * Клас AudioBook описує аудіокнигу в магазині
+ * The AudioBook class describes an audiobook in the store.
  */
 class AudioBook {
-  /**
-   * Конструктор AudioBook приймає об'єкт з параметрами
-   * title - назва книги
-   * author - автор книги
-   * audioLength - тривалість аудіокниги
-   */
-  /**
-     * Метод describe генерує опис аудіокниги
-       Повертає рядок у форматі: "Аудіокнига: '{назва}', автор: '{автор}', тривалість: '{тривалість}'"
-     */
+  constructor({ title, author, audioLength }) {
+    this.title = title;
+    this.author = author;
+    this.audioLength = audioLength;
+  }
+
+  describe() {
+    return `Audiobook: '${this.title}', author: '${this.author}', duration: '${this.audioLength}'`;
+  }
 }
 
 /**
- * Клас ProductFactory використовується для створення об'єктів-продуктів.
+ * The ProductFactory class is used to create product objects.
  */
-
 class ProductFactory {
-  // TYPE - статична властивість, що визначає типи продуктів, які можуть бути створені.
-  // {
-  //   BOOK: "book",
-  //   AUDIOBOOK: "audiobook",
-  // }
-  /**
-   * Статичний метод createProduct використовується для створення об'єктів-продуктів, отримує
-   * type - тип продукту, що має бути створений. Має бути одним зі значень властивості TYPE.
-   * options - об'єкт з параметрами для конструктора продукту.
-   *
-   * В залежності від типу, повертає або екземпляр класу Book, або AudioBook.
-   *
-   *  Кидає помилку, якщо переданий тип не підтримується `Такого типу продукту не існує: ${type}`.
-   */
+  static TYPE = {
+    // TYPE is a static property that defines the types of products that can be created.
+    BOOK: "book",
+    AUDIOBOOK: "audiobook",
+  };
+
+  static createProduct(type, options) {
+    switch (type) {
+      case this.TYPE.BOOK:
+        return new Book(options);
+      case this.TYPE.AUDIOBOOK:
+        return new AudioBook(options);
+      default:
+        throw new Error(`Product type does not exist: ${type}`);
+    }
+  }
 }
-console.log("Завдання 2 ====================================");
-// Після виконання розкоментуйте код нижче
 
-// Використовуємо ProductFactory для створення нової книги
-// const factoryBook = ProductFactory.createProduct(ProductFactory.TYPE.BOOK, {
-//   title: "Назва книги",
-//   author: "Автор книги",
-//   coverColor: "Синій",
-// });
+console.log("Task 2 ====================================");
 
-// Виводимо в консоль опис нової книги
-// console.log(factoryBook.describe());
+// Using ProductFactory to create a new book
+const factoryBook = ProductFactory.createProduct(ProductFactory.TYPE.BOOK, {
+  title: "Book Title",
+  author: "Book Author",
+  coverColor: "Blue",
+});
 
-// Використовуємо ProductFactory для створення нової аудіокниги
-// const factoryAudiobook = ProductFactory.createProduct(
-//   ProductFactory.TYPE.AUDIOBOOK,
-//   {
-//     title: "Назва аудіокниги",
-//     author: "Автор аудіокниги ",
-//     audioLength: "5 годин",
-//   }
-// );
+// Logging the description of the new book
+console.log(factoryBook.describe());
 
-// Виводимо в консоль опис нової аудіокниги
-// console.log(factoryAudiobook.describe());
+// Using ProductFactory to create a new audiobook
+const factoryAudiobook = ProductFactory.createProduct(
+  ProductFactory.TYPE.AUDIOBOOK,
+  {
+    title: "Audiobook Title",
+    author: "Audiobook Author",
+    audioLength: "5 hours",
+  }
+);
 
-// Спробуємо створити продукт непідтримуваного типу
-// try {
-//   const factoryUnknown = ProductFactory.createProduct("comics", {});
-// } catch (error) {
-//   // Виводимо помилку в консоль
-//   console.error(error.message);
-// }
+// Logging the description of the new audiobook
+console.log(factoryAudiobook.describe());
+
+// Attempting to create a product of an unsupported type
+try {
+  const factoryUnknown = ProductFactory.createProduct("comics", {});
+} catch (error) {
+  // Logging the error to the console
+  console.error(error.message);
+}

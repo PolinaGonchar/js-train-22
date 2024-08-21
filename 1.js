@@ -1,36 +1,38 @@
-// Одиночка (Singleton) — це патерн програмування, який забезпечує,
-// що клас має тільки один екземпляр і надає глобальну точку доступу до цього екземпляра.
+// Singleton — this is a programming pattern that ensures
+// that a class has only one instance and provides a global access point to this instance.
 
-// Клас OrderTracker відповідає за відстеження замовлень
+// The OrderTracker class is responsible for tracking orders
 class OrderTracker {
-  // Приватне статичне instance поле для збереження єдиного екземпляра класу початкове значення null
-  // Приватне статичне orders поле для збереження списку замовлень початкове значення []
-  /**
-   * Статичний метод create використовується для створення єдиного екземпляра класу
-   */
-  // Перевіряємо, чи є вже створений екземпляр класу
-  // Якщо немає, створюємо новий екземпляр
-  // Інакше повертаємо єдиний екземпляр класу
-  /**
-   * Статичний метод add використовується для додавання замовлення до списку
-   * Отримує item та додає його до масиву замовлень
-   */
-  /**
-   * Статичний метод get використовується для отримання списку замовлень
-   */
+  static #instance = null;
+  static #orders = [];
+
+  static create() {
+    if (!this.#instance) {
+      this.#instance = new OrderTracker();
+    }
+    return this.#instance;
+  }
+
+  static add(item) {
+    this.#orders.push(item);
+  }
+
+  static get() {
+    return this.#orders;
+  }
 }
-console.log("Завдання 1 ====================================");
-// Після виконання розкоментуйте код нижче
 
-// Створюємо єдиний екземпляр класу OrderTracker
-// const tracker = OrderTracker.create();
+console.log("Task 1 ====================================");
 
-// Додаємо замовлення до списку
-// OrderTracker.add("Телефон");
-// OrderTracker.add("Ноутбук");
+// Create the single instance of the OrderTracker class
+const tracker = OrderTracker.create();
 
-// Отримуємо список замовлень
-// const orders = OrderTracker.get();
+// Add orders to the list
+OrderTracker.add("Phone");
+OrderTracker.add("Laptop");
 
-// Виводимо список замовлень в консоль
-// console.log(orders);
+// Get the list of orders
+const orders = OrderTracker.get();
+
+// Output the list of orders to the console
+console.log(orders);

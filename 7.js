@@ -1,34 +1,43 @@
-// Міст (Bridge) — це паттерн програмування, який дозволяє розмістити абстракцію і реалізацію в окремі класи, дозволяючи їм мати незалежний функціонал
+// Bridge is a design pattern that allows separating abstraction and implementation into separate classes, allowing them to have independent functionality.
 
-// Клас Participant представляє користувача, який може відправляти повідомлення.
+// The Participant class represents a user who can send messages.
 class Participant {
-  // Конструктор приймає два параметри: alias, communicator
-  // Метод dispatchMessage відправляє повідомлення за допомогою відповідного засобу комунікації.
-  // Він приймає один параметр - text - текст повідомлення, яке потрібно відправити.
-  // Метод prepareMessage приймає text та повертає  `[${this.alias}]: ${text}`
+  constructor(alias, communicator) {
+    this.alias = alias;
+    this.communicator = communicator;
+  }
+  dispatchMessage(text) {
+    const formattedMessage = this.prepareMessage(text);
+    this.communicator.transmit(formattedMessage);
+  }
+
+  prepareMessage(text) {
+    return `[${this.alias}]: ${text}`;
+  }
 }
 
-// Клас SMSCommunicator відповідає за відправку повідомлень через SMS.
+// The SMSCommunicator class is responsible for sending messages via SMS.
 class SMSCommunicator {
-  // Статичний метод transmit відправляє SMS.
-  // Він приймає один параметр - message - текст повідомлення, яке потрібно відправити, та виводимо в консоль `Відправлено SMS: ${message}`.
+  static transmit(message) {
+    console.log(`SMS sent: ${message}`);
+  }
 }
 
-// Клас EmailCommunicator відповідає за відправку повідомлень через Email.
+// The EmailCommunicator class is responsible for sending messages via Email.
 class EmailCommunicator {
-  // Статичний метод transmit відправляє Email.
-  // Він приймає один параметр - message - текст повідомлення, яке потрібно відправити та виводимо в консоль `Відправлено Email: ${message}`.
+  static transmit(message) {
+    console.log(`Email sent: ${message}`);
+  }
 }
 
-console.log("Завдання 7 ====================================");
-// Після виконання розкоментуйте код нижче
+console.log("Task 7 ====================================");
 
-// Створюємо двох користувачів - Max та Linda - які відправляють повідомлення за допомогою різних засобів комунікації.
-// const max = new Participant("Max", SMSCommunicator);
-// const linda = new Participant("Linda", EmailCommunicator);
+// Create two users - Max and Linda - who send messages using different communication methods.
+const max = new Participant("Max", SMSCommunicator);
+const linda = new Participant("Linda", EmailCommunicator);
 
-// Max відправляє повідомлення через SMS.
-// max.dispatchMessage("Hello!"); // Виведе: Відправлено SMS: [Max]: Hello!
+// Max sends a message via SMS.
+max.dispatchMessage("Hello!"); // Outputs: SMS sent: [Max]: Hello!
 
-// Linda відправляє повідомлення через Email.
-// linda.dispatchMessage("Hello!"); // Виведе: Відправлено Email: [Linda]: Hello!
+// Linda sends a message via Email.
+linda.dispatchMessage("Hello!"); // Outputs: Email sent: [Linda]: Hello!
